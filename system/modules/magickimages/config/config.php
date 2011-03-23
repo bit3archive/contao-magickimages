@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
+ * MagickImages
+ * Copyright (C) 2011 Tristan Lins
  *
+ * Extension for:
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2011 Leo Feyer
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,11 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    MagickImages
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
+ * @filesource
  */
 
 
@@ -34,13 +39,15 @@
  * necessary - for images > 3000x3000 or target size > 1200x1200
  * always - always use imagemagick
  */
+$GLOBALS['TL_CONFIG']['magickimages_type'] = class_exists('Imagick') ? 'buildin' : 'exec';
+
 $GLOBALS['TL_CONFIG']['magickimages_use'] = 'necessary';
 
 $GLOBALS['TL_CONFIG']['magickimages_quality']['jpg'] = -1;
 $GLOBALS['TL_CONFIG']['magickimages_quality']['png'] = -1;
 $GLOBALS['TL_CONFIG']['magickimages_quality']['gif'] = -1;
 
-$GLOBALS['TL_CONFIG']['magickimages_resize_filter'] = Imagick::FILTER_CUBIC;
+$GLOBALS['TL_CONFIG']['magickimages_resize_filter'] = class_exists('Imagick') ? Imagick::FILTER_CUBIC : 0;
 $GLOBALS['TL_CONFIG']['magickimages_resize_blur'] = 1;
 
 $GLOBALS['TL_CONFIG']['magickimages_resize_unsharp_mask']['enabled'] = false;
@@ -48,14 +55,6 @@ $GLOBALS['TL_CONFIG']['magickimages_resize_unsharp_mask']['radius'] = 0;
 $GLOBALS['TL_CONFIG']['magickimages_resize_unsharp_mask']['sigma'] = 0.5;
 $GLOBALS['TL_CONFIG']['magickimages_resize_unsharp_mask']['amount'] = 1;
 $GLOBALS['TL_CONFIG']['magickimages_resize_unsharp_mask']['threshold'] = 0.05;
-
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['enabled'] = false;
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['text'] = 'MagickImages';
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['font'] = '/usr/share/fonts/truetype/freefont/FreeSansBold.ttf';
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['font_size'] = 25;
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['opacity'] = 0.4;
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['gravity'] = Imagick::GRAVITY_CENTER;
-$GLOBALS['TL_CONFIG']['magickimages_watermark']['angle'] = 25;
 
 /**
  * HOOKS
