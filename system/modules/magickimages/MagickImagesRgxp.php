@@ -34,25 +34,26 @@
 
 
 /**
- * MagickImages settings
+ * Class MagickImagesRgxp
+ *
+ * @copyright  InfinitySoft 2010,2011
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    MagickImagesRgxp
  */
-$GLOBALS['TL_CONFIG']['magickimages_force']                  = false;
-$GLOBALS['TL_CONFIG']['magickimages_process']                = !class_exists('Imagick');
-$GLOBALS['TL_CONFIG']['magickimages_type']                   = 'proc';
-$GLOBALS['TL_CONFIG']['magickimages_convert_path']           = 'convert';
-$GLOBALS['TL_CONFIG']['magickimages_filter']                 = 'Cubic';
-$GLOBALS['TL_CONFIG']['magickimages_blur']                   = false;
-$GLOBALS['TL_CONFIG']['magickimages_blur_radius']            = 3;
-$GLOBALS['TL_CONFIG']['magickimages_blur_sigma']             = 2;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask']           = false;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_radius']    = 0;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_sigma']     = 0.5;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_amount']    = 1;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold'] = 0.05;
+class MagickImagesRgxp
+{
+	public function myAddCustomRegexp($strRegexp, $varValue, Widget $objWidget)
+	{
+		if ($strRegexp == 'float')
+		{
+			if (!preg_match('/^\d+(\.\d+)?|\.\d+$/', $varValue))
+			{
+				$objWidget->addError('Field ' . $objWidget->label . ' should be a floating point number.');
+			}
+			return true;
+		}
+		return false;
+	}
+}
 
-/**
- * HOOKS
- */
-$GLOBALS['TL_HOOKS']['getImage'][]        = array('MagickImages', 'getImage');
-$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('MagickImagesRgxp', 'myAddCustomRegexp');
 ?>
