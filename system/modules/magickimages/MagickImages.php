@@ -321,7 +321,8 @@ else
 			}
 			
 			// set filter
-			$strFilter = 'FILTER_' . strtoupper($GLOBALS['TL_CONFIG']['magickimages_filter']);
+			$strFilter = 'FILTER_' . strtoupper(preg_replace('#[^\w]#', '', $GLOBALS['TL_CONFIG']['magickimages_filter']));
+			$intFilter = eval('return Imagick::'.$strFilter.';');
 			
 			// Mode-specific changes
 			if ($intWidth && $intHeight)
@@ -363,7 +364,7 @@ else
 					$objImagick->resizeImage(
 						$intWidth,
 						$intHeight,
-						Imagick::$strFilter,
+						$intFilter,
 						1);
 				}
 				else if ($dblSrcAspectRatio < $dblTargetAspectRatio)
@@ -371,7 +372,7 @@ else
 					$objImagick->resizeImage(
 						$intWidth,
 						0,
-						Imagick::$strFilter,
+						$intFilter,
 						1);
 					$objImagick->cropimage(
 						$intWidth,
@@ -384,7 +385,7 @@ else
 					$objImagick->resizeImage(
 						0,
 						$intHeight,
-						Imagick::$strFilter,
+						$intFilter,
 						1);
 					$objImagick->cropimage(
 						$intWidth,
