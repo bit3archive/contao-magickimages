@@ -401,7 +401,7 @@ else
 				$objImagick->resizeImage(
 					$intWidth,
 					0,
-					Imagick::$strFilter,
+					$intFilter,
 					1);
 			}
 	
@@ -411,7 +411,7 @@ else
 				$objImagick->resizeImage(
 					0,
 					$intHeight,
-					Imagick::$strFilter,
+					$intFilter,
 					1);
 			}
 			
