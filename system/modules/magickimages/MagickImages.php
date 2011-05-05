@@ -291,159 +291,162 @@ else
 		{
 			if (!$varWidth && !$varHeight) return false;
 	
-			// detect image format
-			$strFormat = $objFile->extension;
-			
-			if (!(	$strFormat == 'jpg'
-				||  $strFormat == 'png'
-				||  $strFormat == 'gif'))
-			{
-				$strFormat = 'jpg';
-			}
-			
-			// the target size
-			$intWidth = intval($varWidth);
-			$intHeight = intval($varHeight);
-			
-			// load imagick
-			$objImagick = new Imagick();
-			
-			// read the source file
-			$objImagick->readImage(TL_ROOT . '/' . $strImage);
-			
-			// set the output format
-			$objImagick->setImageFormat($strFormat);
-			
-			// set the jpeg quality
-			if ($strFormat=='jpg')
-			{
-				$objImagick->setCompressionQuality($GLOBALS['TL_CONFIG']['jpgQuality']);
-			}
-			
-			// set filter
-			$strFilter = 'FILTER_' . strtoupper(preg_replace('#[^\w]#', '', $GLOBALS['TL_CONFIG']['magickimages_filter']));
-			$intFilter = eval('return Imagick::'.$strFilter.';');
-			
-			// Mode-specific changes
-			if ($intWidth && $intHeight)
-			{
-				switch ($strMode)
-				{
-					case 'proportional':
-						if ($objFile->width >= $objFile->height)
-						{
-							unset($varHeight, $intHeight);
-						}
-						else
-						{
-							unset($varWidth, $intWidth);
-						}
-						break;
-	
-					case 'box':
-						if (ceil($objFile->height * $varWidth / $objFile->width) <= $intHeight)
-						{
-							unset($varHeight, $intHeight);
-						}
-						else
-						{
-							unset($varWidth, $intWidth);
-						}
-						break;
-				}
-			}
-			
-			// Resize width and height and crop the image if necessary
-			if ($intWidth && $intHeight)
-			{
-				$dblSrcAspectRatio = $objFile->width / $objFile->height;
-				$dblTargetAspectRatio = $intWidth / $intHeight;
+			try {
+				// detect image format
+				$strFormat = $objFile->extension;
 				
-				if ($dblSrcAspectRatio == $dblTargetAspectRatio)
+				if (!(	$strFormat == 'jpg'
+					||  $strFormat == 'png'
+					||  $strFormat == 'gif'))
 				{
-					$objImagick->resizeImage(
-						$intWidth,
-						$intHeight,
-						$intFilter,
-						1);
-				}
-				else if ($dblSrcAspectRatio < $dblTargetAspectRatio)
-				{
-					$objImagick->resizeImage(
-						$intWidth,
-						0,
-						$intFilter,
-						1);
-					$objImagick->cropimage(
-						$intWidth,
-						$intHeight,
-						0,
-						ceil(($objImagick->getImageHeight() - $intHeight) / 2));
-				}
-				else if ($dblSrcAspectRatio > $dblTargetAspectRatio)
-				{
-					$objImagick->resizeImage(
-						0,
-						$intHeight,
-						$intFilter,
-						1);
-					$objImagick->cropimage(
-						$intWidth,
-						$intHeight,
-						ceil(($objImagick->getImageWidth() - $intWidth) / 2),
-						0);
-				}
-			}
-	
-			// resize by width
-			else if ($intWidth)
-			{
-				$objImagick->resizeImage(
-					$intWidth,
-					0,
-					$intFilter,
-					1);
-			}
-	
-			// resize by height
-			else if ($intHeight)
-			{
-				$objImagick->resizeImage(
-					0,
-					$intHeight,
-					$intFilter,
-					1);
-			}
-			
-			// blur image
-			if ($GLOBALS['TL_CONFIG']['magickimages_blur'])
-			{
-				$objImagick->blurimage($GLOBALS['TL_CONFIG']['magickimages_blur_radius'], $GLOBALS['TL_CONFIG']['magickimages_blur_sigma']);
-			}
-			
-			// unsharp image
-			if ($GLOBALS['TL_CONFIG']['magickimages_unsharp_mask'])
-			{
-				$objImagick->unsharpMaskImage(
-					$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_radius'],
-					$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_sigma'],
-					$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_amount'],
-					$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold']);
-			}
-			
-			if ($objImagick->writeImage(TL_ROOT . '/' . $strCacheName)) {
-				// Set the file permissions when the Safe Mode Hack is used
-				if ($GLOBALS['TL_CONFIG']['useFTP'])
-				{
-					$this->import('Files');
-					$this->Files->chmod($strCacheName, 0644);
+					$strFormat = 'jpg';
 				}
 				
-				// Return the path to new image
-				return $strCacheName;
-			} else {
-				return false;
+				// the target size
+				$intWidth = intval($varWidth);
+				$intHeight = intval($varHeight);
+				
+				// load imagick
+				$objImagick = new Imagick();
+				
+				// read the source file
+				$objImagick->readImage(TL_ROOT . '/' . $strImage);
+				
+				// set the output format
+				$objImagick->setImageFormat($strFormat);
+				
+				// set the jpeg quality
+				if ($strFormat=='jpg')
+				{
+					$objImagick->setCompressionQuality($GLOBALS['TL_CONFIG']['jpgQuality']);
+				}
+				
+				// set filter
+				$strFilter = 'FILTER_' . strtoupper(preg_replace('#[^\w]#', '', $GLOBALS['TL_CONFIG']['magickimages_filter']));
+				$intFilter = eval('return Imagick::'.$strFilter.';');
+				
+				// Mode-specific changes
+				if ($intWidth && $intHeight)
+				{
+					switch ($strMode)
+					{
+						case 'proportional':
+							if ($objFile->width >= $objFile->height)
+							{
+								unset($varHeight, $intHeight);
+							}
+							else
+							{
+								unset($varWidth, $intWidth);
+							}
+							break;
+		
+						case 'box':
+							if (ceil($objFile->height * $varWidth / $objFile->width) <= $intHeight)
+							{
+								unset($varHeight, $intHeight);
+							}
+							else
+							{
+								unset($varWidth, $intWidth);
+							}
+							break;
+					}
+				}
+				
+				// Resize width and height and crop the image if necessary
+				if ($intWidth && $intHeight)
+				{
+					$dblSrcAspectRatio = $objFile->width / $objFile->height;
+					$dblTargetAspectRatio = $intWidth / $intHeight;
+					
+					if ($dblSrcAspectRatio == $dblTargetAspectRatio)
+					{
+						$objImagick->resizeImage(
+							$intWidth,
+							$intHeight,
+							$intFilter,
+							1);
+					}
+					else if ($dblSrcAspectRatio < $dblTargetAspectRatio)
+					{
+						$objImagick->resizeImage(
+							$intWidth,
+							0,
+							$intFilter,
+							1);
+						$objImagick->cropimage(
+							$intWidth,
+							$intHeight,
+							0,
+							ceil(($objImagick->getImageHeight() - $intHeight) / 2));
+					}
+					else if ($dblSrcAspectRatio > $dblTargetAspectRatio)
+					{
+						$objImagick->resizeImage(
+							0,
+							$intHeight,
+							$intFilter,
+							1);
+						$objImagick->cropimage(
+							$intWidth,
+							$intHeight,
+							ceil(($objImagick->getImageWidth() - $intWidth) / 2),
+							0);
+					}
+				}
+		
+				// resize by width
+				else if ($intWidth)
+				{
+					$objImagick->resizeImage(
+						$intWidth,
+						ceil($intWidth * $objFile->height / $objFile->width),
+						$intFilter,
+						1);
+				}
+		
+				// resize by height
+				else if ($intHeight)
+				{
+					$objImagick->resizeImage(
+						ceil($intHeight * $objFile->width / $objFile->height),
+						$intHeight,
+						$intFilter,
+						1);
+				}
+				
+				// blur image
+				if ($GLOBALS['TL_CONFIG']['magickimages_blur'])
+				{
+					$objImagick->blurimage($GLOBALS['TL_CONFIG']['magickimages_blur_radius'], $GLOBALS['TL_CONFIG']['magickimages_blur_sigma']);
+				}
+				
+				// unsharp image
+				if ($GLOBALS['TL_CONFIG']['magickimages_unsharp_mask'])
+				{
+					$objImagick->unsharpMaskImage(
+						$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_radius'],
+						$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_sigma'],
+						$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_amount'],
+						$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold']);
+				}
+				
+				if ($objImagick->writeImage(TL_ROOT . '/' . $strCacheName)) {
+					// Set the file permissions when the Safe Mode Hack is used
+					if ($GLOBALS['TL_CONFIG']['useFTP'])
+					{
+						$this->import('Files');
+						$this->Files->chmod($strCacheName, 0644);
+					}
+					
+					// Return the path to new image
+					return $strCacheName;
+				}
+			} catch (ImagickException $e) {
+				$this->log('Could not resize image "' . $strImage . '": '. $e->getMessage(), 'MagickImages::resize', TL_ERROR);
 			}
+			return false;
 		}
 	}
 }

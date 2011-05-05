@@ -45,10 +45,10 @@ $GLOBALS['TL_CONFIG']['magickimages_blur']                   = false;
 $GLOBALS['TL_CONFIG']['magickimages_blur_radius']            = 3;
 $GLOBALS['TL_CONFIG']['magickimages_blur_sigma']             = 2;
 $GLOBALS['TL_CONFIG']['magickimages_unsharp_mask']           = false;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_radius']    = 0;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_sigma']     = 0.5;
+$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_radius']    = 1.5;
+$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_sigma']     = 1.2;
 $GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_amount']    = 1;
-$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold'] = 0.05;
+$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold'] = 0.1;
 
 /**
  * HOOKS
