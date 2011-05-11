@@ -467,6 +467,14 @@ class MagickImages extends MagickImagesImpl {
 			return false;
 		}
 		
+		// Hack to determinate the $target parameter of Controller::getImage
+		$arrBacktrace = debug_backtrace();
+		$arrCall = $arrBacktrace[1];
+		if ($arrCall['class'] == 'Controller' && $arrCall['function'] == 'getImage' && isset($arrCall['args'][4]) && strlen($arrCall['args'][4]))
+		{
+			$strCacheName = $arrCall['args'][4];
+		}
+			
 		return $this->resize($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile);
 	}
 }
