@@ -200,7 +200,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 				$strCmd .= ' ' . escapeshellarg($strArg);
 			}
 			
-			switch ($GLOBALS['TL_CONFIG']['magickimages_type'])
+			switch ($GLOBALS['TL_CONFIG']['magickimages_process_call'])
 			{
 			case 'proc':
 				// execute convert

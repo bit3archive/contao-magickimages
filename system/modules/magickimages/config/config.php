@@ -38,7 +38,7 @@
  */
 $GLOBALS['TL_CONFIG']['magickimages_force']                  = false;
 $GLOBALS['TL_CONFIG']['magickimages_process']                = !class_exists('Imagick');
-$GLOBALS['TL_CONFIG']['magickimages_type']                   = 'proc';
+$GLOBALS['TL_CONFIG']['magickimages_process_call']           = 'proc';
 $GLOBALS['TL_CONFIG']['magickimages_convert_path']           = 'convert';
 $GLOBALS['TL_CONFIG']['magickimages_filter']                 = 'Cubic';
 $GLOBALS['TL_CONFIG']['magickimages_blur']                   = false;
