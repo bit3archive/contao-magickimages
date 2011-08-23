@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2011 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -54,5 +54,3 @@ $GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold'] = 0.1;
  * HOOKS
  */
 $GLOBALS['TL_HOOKS']['getImage'][]        = array('MagickImages', 'getImage');
-$GLOBALS['TL_HOOKS']['addCustomRegexp'][] = array('MagickImagesRgxp', 'myAddCustomRegexp');
-?>

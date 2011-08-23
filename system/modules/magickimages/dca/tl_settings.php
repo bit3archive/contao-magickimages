@@ -7,7 +7,7 @@
  * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- * 
+ *
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -87,13 +87,13 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_blur_radius'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_blur_radius'],
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'float', 'mandatory'=>true, 'tl_class'=>'w50')
+	'eval'                    => array('rgxp'=>'digit', 'mandatory'=>true, 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_blur_sigma'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_blur_sigma'],
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'float', 'tl_class'=>'w50')
+	'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_unsharp_mask'] = array
 (
@@ -105,25 +105,25 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_unsharp_mask_radius'] 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_unsharp_mask_radius'],
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'float', 'tl_class'=>'w50')
+	'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_unsharp_mask_sigma'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_unsharp_mask_sigma'],
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'float', 'tl_class'=>'w50')
+	'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_unsharp_mask_amount'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_unsharp_mask_amount'],
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'float', 'tl_class'=>'w50')
+	'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_unsharp_mask_threshold'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_unsharp_mask_threshold'],
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'float', 'tl_class'=>'w50')
+	'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
 );
 
 class tl_settings_magickimages
