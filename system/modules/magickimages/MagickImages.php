@@ -240,76 +240,26 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 			{
 				$strCmd .= ' ' . escapeshellarg($strArg);
 			}
+			
+			if ($this->execute($strCmd)) {
+				// Set the file permissions when the Safe Mode Hack is used
+				if ($GLOBALS['TL_CONFIG']['useFTP'])
+				{
+					$this->import('Files');
+					$this->Files->chmod($strCacheName, 0644);
+				}
 
-			switch ($GLOBALS['TL_CONFIG']['magickimages_process_call'])
-			{
-			case 'proc':
-				// execute convert
-				$procConvert = proc_open(
-					$strCmd,
-					array(
-						0 => array("pipe", "r"),
-						1 => array("pipe", "w"),
-						2 => array("pipe", "w")
-					),
-					$arrPipes);
-				if ($procConvert === false)
-				{
-					$this->log(sprintf("convert could not be started!
-cmd: %s", $strCmd), 'MagickImages::getImage', TL_ERROR);
-					return false;
-				}
-				// close stdin
-				fclose($arrPipes[0]);
-				// close stdout
-				fclose($arrPipes[1]);
-				// read and close stderr
-				$strErr = stream_get_contents($arrPipes[2]);
-				fclose($arrPipes[2]);
-				// wait until yui-compressor terminates
-				$intCode = proc_close($procConvert);
-				if ($intCode != 0)
-				{
-					$this->log(sprintf("Execution of convert failed!
-cmd: %s
-stderr: %s", $strCmd, $strErr), 'MagickImages::getImage', TL_ERROR);
-					return false;
-				}
-				break;
-
-			case 'exec':
-				exec($strCmd, $arrOutput, $varReturn);
-				if ($varReturn != 0)
-				{
-					$this->log(sprintf("Execution of convert failed!
-cmd: %s
-output: %s", $strCmd, implode("\n", $arrOutput)), 'MagickImages::getImage', TL_ERROR);
-					return false;
-				}
-				break;
-
-			case 'shell_exec':
-				$strOutput = shell_exec($strCmd);
-				if ($strOutput)
-				{
-					$this->log(sprintf("Execution of convert failed!
-cmd: %s
-output: %s", $strCmd, $strOutput), 'MagickImages::getImage', TL_ERROR);
-					return false;
-				}
-				break;
+				// Return the path to new image
+				return $strCacheName;
 			}
-
-			// Set the file permissions when the Safe Mode Hack is used
-			if ($GLOBALS['TL_CONFIG']['useFTP'])
-			{
-				$this->import('Files');
-				$this->Files->chmod($strCacheName, 0644);
+			else {
+				return false;
 			}
-
-			// Return the path to new image
-			return $strCacheName;
 		}
+		
+		protected abstract function execute($strCmd);
+		
+		protected abstract function optimize($strFile);
 	}
 }
 else
@@ -518,42 +468,187 @@ else
 			}
 			return false;
 		}
+		
+		protected abstract function execute($strCmd);
+		
+		protected abstract function optimize($strFile);
 	}
 }
 
-class MagickImages extends MagickImagesImpl
-{
-	public function getImage($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile) // do not add $target parameter, to not break contao 2.9 compatibility
+class MagickImages extends MagickImagesImpl {
+	public function getImage($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile)
 	{
 		// break resize if ...
 		if (
 				// ImageMagick should not allways be used
 				!$GLOBALS['TL_CONFIG']['magickimages_force']
 				// and it is not necessary
-			&& !(	$objFile->width  > 3000
-				||  $objFile->height > 3000
-				||  $varWidth  > 1200
-				||  $varHeight > 1200))
+			&& !(	$objFile->width  > $GLOBALS['TL_CONFIG']['gdMaxImgWidth']
+				||  $objFile->height > $GLOBALS['TL_CONFIG']['gdMaxImgHeight']))
 		{
 			return false;
 		}
 
-		if (version_compare(VERSION, '2.10') < 0)
-		{
-			// Hack to determinate the $target parameter of Controller::getImage
-			$arrBacktrace = debug_backtrace();
-			$arrCall = $arrBacktrace[1];
-			if ($arrCall['class'] == 'Controller' && $arrCall['function'] == 'getImage' && isset($arrCall['args'][4]) && strlen($arrCall['args'][4]))
-			{
-				$strCacheName = $arrCall['args'][4];
-			}
-		}
-		else
-		{
-			// in Contao 2.10, the $target is the 6. argument
-			$strCacheName = func_get_arg(6);
+		$strKey = '';
+
+		// use pngrewrite on png's
+		if (isset($GLOBALS['TL_CONFIG']['magickimages_pngrewrite']) &&
+			$GLOBALS['TL_CONFIG']['magickimages_pngrewrite'] &&
+			$objFile->extension == 'png') {
+			$strKey .= 'R';
 		}
 
-		return $this->resize($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile);
+		// use optipng
+		if (isset($GLOBALS['TL_CONFIG']['magickimages_optipng']) &&
+			$GLOBALS['TL_CONFIG']['magickimages_optipng'] &&
+			in_array($objFile->extension, array('png', 'bmp', 'gif', 'pnm', 'tiff'))) {
+			$strKey .= 'O';
+		}
+
+		// use optipng
+		if (isset($GLOBALS['TL_CONFIG']['magickimages_advpng']) &&
+			$GLOBALS['TL_CONFIG']['magickimages_advpng'] &&
+			$objFile->extension == 'png') {
+			$strKey .= 'A';
+		}
+
+		if (strlen($strKey)) {
+			// this will break the contao caching mechanism!
+			$strCacheName = preg_replace('#(\.\w+)$#', '-' . $strKey . '$1', $strCacheName);
+
+			// Return the path of the new image if it exists already
+			if (!$GLOBALS['TL_CONFIG']['debugMode'] && file_exists(TL_ROOT . '/' . $strCacheName))
+			{
+				return $strCacheName;
+			}
+		}
+
+		// Hack to determinate the $target parameter of Controller::getImage
+		$arrBacktrace = debug_backtrace();
+		$arrCall = $arrBacktrace[1];
+		if ($arrCall['class'] == 'Controller' && $arrCall['function'] == 'getImage' && isset($arrCall['args'][4]) && strlen($arrCall['args'][4]))
+		{
+			$strCacheName = $arrCall['args'][4];
+		}
+			
+		$strImage = $this->resize($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile);
+
+		if ($strImage) {
+			// optimize image
+			$this->optimize($strCacheName);
+
+		}
+		return $strImage;
+	}
+	
+	protected function execute($strCmd)
+	{
+		switch ($GLOBALS['TL_CONFIG']['magickimages_process_call'])
+		{
+		case 'proc':
+			// execute convert
+			$procConvert = proc_open(
+				$strCmd,
+				array(
+					0 => array("pipe", "r"),
+					1 => array("pipe", "w"),
+					2 => array("pipe", "w")
+				),
+				$arrPipes);
+			if ($procConvert === false)
+			{
+				$this->log(sprintf("convert could not be started!
+cmd: %s", $strCmd), 'MagickImages::getImage', TL_ERROR);
+				return false;
+			}
+			// close stdin
+			fclose($arrPipes[0]);
+			// close stdout
+			fclose($arrPipes[1]);
+			// read and close stderr
+			$strErr = stream_get_contents($arrPipes[2]);
+			fclose($arrPipes[2]);
+			// wait until yui-compressor terminates
+			$intCode = proc_close($procConvert);
+			if ($intCode != 0)
+			{
+				$this->log(sprintf("Execution of convert failed!
+cmd: %s
+stderr: %s", $strCmd, $strErr), 'MagickImages::getImage', TL_ERROR);
+				return false;
+			}
+			break;
+			
+		case 'exec':
+			exec($strCmd, $arrOutput, $varReturn);
+			if ($varReturn != 0)
+			{
+				$this->log(sprintf("Execution of convert failed!
+cmd: %s
+output: %s", $strCmd, implode("\n", $arrOutput)), 'MagickImages::getImage', TL_ERROR);
+				return false;
+			}
+			break;
+			
+		case 'shell_exec':
+			$strOutput = shell_exec($strCmd);
+			if ($strOutput)
+			{
+				$this->log(sprintf("Execution of convert failed!
+cmd: %s
+output: %s", $strCmd, $strOutput), 'MagickImages::getImage', TL_ERROR);
+				return false;
+			}
+			break;
+		}
+		
+		return true;
+	}
+		
+	protected function optimize($strFile)
+	{
+		$objFile = new File($strFile);
+
+		// use pngrewrite on png's
+		if (isset($GLOBALS['TL_CONFIG']['magickimages_pngrewrite']) &&
+			$GLOBALS['TL_CONFIG']['magickimages_pngrewrite'] &&
+			$objFile->extension == 'png') {
+			$strCmd = 'pngrewrite ' . escapeshellarg(TL_ROOT . '/' . $strFile) . ' ' . escapeshellarg(TL_ROOT . '/' . $strFile);
+			$this->execute($strCmd);
+		}
+
+		// use optipng
+		if (isset($GLOBALS['TL_CONFIG']['magickimages_optipng']) &&
+			$GLOBALS['TL_CONFIG']['magickimages_optipng'] &&
+			in_array($objFile->extension, array('png', 'bmp', 'gif', 'pnm', 'tiff'))) {
+			$strCmd = 'optipng -o' . intval($GLOBALS['TL_CONFIG']['magickimages_optipng_optimization_level']) . ' ' . escapeshellarg(TL_ROOT . '/' . $strFile);
+			$this->execute($strCmd);
+		}
+
+		// use optipng
+		if (isset($GLOBALS['TL_CONFIG']['magickimages_advpng']) &&
+			$GLOBALS['TL_CONFIG']['magickimages_advpng'] &&
+			$objFile->extension == 'png') {
+			$strCmd = 'advpng -z ';
+			switch ($GLOBALS['TL_CONFIG']['magickimages_advpng_level']) {
+				case 'store':
+					$strCmd .= '--shrink-store';
+					break;
+				case 'fast':
+					$strCmd .= '--shrink-fast';
+					break;
+				case 'extra':
+					$strCmd .= '--shrink-extra';
+					break;
+				case 'insane':
+					$strCmd .= '--shrink-insane';
+					break;
+				default:
+					$strCmd .= '--shrink-normal';
+					break;
+			}
+			$strCmd .= ' ' . escapeshellarg(TL_ROOT . '/' . $strFile);
+			$this->execute($strCmd);
+		}
 	}
 }
