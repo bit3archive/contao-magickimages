@@ -151,6 +151,46 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 				
 				$arrCmd[] = '-resize';
 
+				// Advanced crop modes
+				switch ($strMode)
+				{
+					case 'left_top':
+						$strGravity = 'NorthWest';
+						break;
+
+					case 'center_top':
+						$strGravity = 'North';
+						break;
+
+					case 'right_top':
+						$strGravity = 'NorthEast';
+						break;
+
+					case 'left_center':
+						$strGravity = 'West';
+						break;
+
+					case 'right_center':
+						$strGravity = 'East';
+						break;
+
+					case 'left_bottom':
+						$strGravity = 'SouthWest';
+						break;
+
+					case 'center_bottom':
+						$strGravity = 'South';
+						break;
+
+					case 'right_bottom':
+						$strGravity = 'SouthEast';
+						break;
+
+					default:
+						$strGravity = 'Center';
+						break;
+				}
+
 				if ($dblSrcAspectRatio == $dblTargetAspectRatio)
 				{
 					$arrCmd[] = $intWidth . 'x' . $intHeight;
@@ -161,7 +201,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 					
 					// crop image
 					$arrCmd[] = '-gravity';
-					$arrCmd[] = 'Center';
+					$arrCmd[] = $strGravity;
 					$arrCmd[] = '-extent';
 					$arrCmd[] = $intWidth . 'x' . $intHeight;
 				}
@@ -171,7 +211,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 					
 					// crop image
 					$arrCmd[] = '-gravity';
-					$arrCmd[] = 'Center';
+					$arrCmd[] = $strGravity;
 					$arrCmd[] = '-extent';
 					$arrCmd[] = $intWidth . 'x' . $intHeight;
 				}
@@ -361,6 +401,9 @@ else
 					$dblSrcAspectRatio = $objFile->width / $objFile->height;
 					$dblTargetAspectRatio = $intWidth / $intHeight;
 
+					// Advanced crop modes
+					list($h, $v) = explode('_', $strMode);
+
 					if ($dblSrcAspectRatio == $dblTargetAspectRatio)
 					{
 						$objImagick->resizeImage(
@@ -376,11 +419,24 @@ else
 							0,
 							$intFilter,
 							1);
-						$objImagick->cropimage(
+
+						switch ($v) {
+							case 'top':
+								$intPositionY = 0;
+								break;
+							case 'bottom':
+								$intPositionY = $objImagick->getImageHeight() - $intHeight;
+								break;
+							default:
+								$intPositionY = ceil(($objImagick->getImageHeight() - $intHeight) / 2);
+								break;
+						}
+
+						$objImagick->cropImage(
 							$intWidth,
 							$intHeight,
 							0,
-							ceil(($objImagick->getImageHeight() - $intHeight) / 2));
+							$intPositionY);
 					}
 					else if ($dblSrcAspectRatio > $dblTargetAspectRatio)
 					{
@@ -389,10 +445,23 @@ else
 							$intHeight,
 							$intFilter,
 							1);
-						$objImagick->cropimage(
+
+						switch ($h) {
+							case 'left':
+								$intPositionX = 0;
+								break;
+							case 'right':
+								$intPositionX = $objImagick->getImageWidth() - $intWidth;
+								break;
+							default:
+								$intPositionX = ceil(($objImagick->getImageWidth() - $intWidth) / 2);
+								break;
+						}
+
+						$objImagick->cropImage(
 							$intWidth,
 							$intHeight,
-							ceil(($objImagick->getImageWidth() - $intWidth) / 2),
+							$intPositionX,
 							0);
 					}
 				}
