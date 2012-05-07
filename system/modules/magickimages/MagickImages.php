@@ -6,8 +6,8 @@
  *
  * Extension for:
  * Contao Open Source CMS
- * Copyright (C) 2005-2011 Leo Feyer
- *
+ * Copyright (C) 2005-2012 Leo Feyer
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -25,7 +25,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010,2011
+ * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    MagickImages
  * @license    LGPL
@@ -37,8 +37,9 @@
  * Class MagickImages
  *
  * Provide an ImageMagick based image resize function.
- * @copyright  InfinitySoft 2010,2011
+ * @copyright  InfinitySoft 2010,2011,2012
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @author     Leo Feyer <http://www.contao.org>
  * @package    MagickImages
  */
 if ($GLOBALS['TL_CONFIG']['magickimages_process'])
@@ -46,11 +47,10 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 	/**
 	 * MagickImages Implementation using convert command with exec.
 	 */
-	class MagickImagesImpl extends System
-	{
+	abstract class MagickImagesImpl extends System {
 		/**
 		 * Resize an image
-		 *
+		 * 
 		 * @param string $strImage
 		 * @param mixed $varWidth
 		 * @param mixed $varHeight
@@ -61,48 +61,48 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 		protected function resize($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile)
 		{
 			if (!$varWidth && !$varHeight) return false;
-
+	
 			// detect image format
 			$strFormat = $objFile->extension;
-
+			
 			if (!(	$strFormat == 'jpg'
 				||  $strFormat == 'png'
 				||  $strFormat == 'gif'))
 			{
 				$strFormat = 'jpg';
 			}
-
+			
 			// the target size
 			$intWidth = intval($varWidth);
 			$intHeight = intval($varHeight);
-
+			
 			// set the source path
 			$strSource = TL_ROOT . '/' . $strImage;
-
+			
 			// set the output path
 			$strTarget = TL_ROOT . '/' . $strCacheName;
-
+			
 			// begin build the exec command
 			$arrCmd = array($strSource);
-
+			
 			// set the jpeg quality
 			if ($strFormat=='jpg')
 			{
 				$arrCmd[] = '-quality';
 				$arrCmd[] = $GLOBALS['TL_CONFIG']['jpgQuality'];
 			}
-
+			
 			// add filter
 			$arrCmd[] = '-filter';
 			$arrCmd[] = $GLOBALS['TL_CONFIG']['magickimages_filter'];
-
+			
 			// blur image
 			if ($GLOBALS['TL_CONFIG']['magickimages_blur'])
 			{
 				$arrCmd[] = '-blur';
 				$arrCmd[] = $GLOBALS['TL_CONFIG']['magickimages_blur_radius'] . 'x' . $GLOBALS['TL_CONFIG']['magickimages_blur_sigma'];
 			}
-
+			
 			// unsharp image
 			if ($GLOBALS['TL_CONFIG']['magickimages_unsharp_mask'])
 			{
@@ -113,7 +113,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 					$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_amount'],
 					$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold']);
 			}
-
+			
 			// Mode-specific changes
 			if ($intWidth && $intHeight)
 			{
@@ -129,7 +129,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 							unset($varWidth, $intWidth);
 						}
 						break;
-
+	
 					case 'box':
 						if (ceil($objFile->height * $varWidth / $objFile->width) <= $intHeight)
 						{
@@ -148,7 +148,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 			{
 				$dblSrcAspectRatio = $objFile->width / $objFile->height;
 				$dblTargetAspectRatio = $intWidth / $intHeight;
-
+				
 				$arrCmd[] = '-resize';
 
 				if ($dblSrcAspectRatio == $dblTargetAspectRatio)
@@ -158,7 +158,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 				else if ($dblSrcAspectRatio < $dblTargetAspectRatio)
 				{
 					$arrCmd[] = $intWidth . 'x' . $intHeight . '^';
-
+					
 					// crop image
 					$arrCmd[] = '-gravity';
 					$arrCmd[] = 'Center';
@@ -168,7 +168,7 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 				else if ($dblSrcAspectRatio > $dblTargetAspectRatio)
 				{
 					$arrCmd[] = '0x' . $intHeight . '^';
-
+					
 					// crop image
 					$arrCmd[] = '-gravity';
 					$arrCmd[] = 'Center';
@@ -176,24 +176,24 @@ if ($GLOBALS['TL_CONFIG']['magickimages_process'])
 					$arrCmd[] = $intWidth . 'x' . $intHeight;
 				}
 			}
-
+	
 			// resize by width
 			else if ($intWidth)
 			{
 				$arrCmd[] = '-resize';
 				$arrCmd[] = $intWidth . 'x0^';
 			}
-
+	
 			// resize by height
 			else if ($intHeight)
 			{
 				$arrCmd[] = '-resize';
 				$arrCmd[] = '0x' . $intHeight . '^';
 			}
-
+			
 			// add target file path
 			$arrCmd[] = $strTarget;
-
+			
 			// build command
 			$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['magickimages_convert_path']);
 			foreach ($arrCmd as $strArg)
@@ -277,11 +277,10 @@ else
 	/**
 	 * MagickImages Implementation using Imagick library.
 	 */
-	class MagickImagesImpl extends System
-	{
+	abstract class MagickImagesImpl extends System {
 		/**
 		 * Resize an image
-		 *
+		 * 
 		 * @param string $strImage
 		 * @param mixed $varWidth
 		 * @param mixed $varHeight
@@ -292,41 +291,41 @@ else
 		protected function resize($strImage, $varWidth, $varHeight, $strMode, $strCacheName, $objFile)
 		{
 			if (!$varWidth && !$varHeight) return false;
-
+	
 			try {
 				// detect image format
 				$strFormat = $objFile->extension;
-
+				
 				if (!(	$strFormat == 'jpg'
 					||  $strFormat == 'png'
 					||  $strFormat == 'gif'))
 				{
 					$strFormat = 'jpg';
 				}
-
+				
 				// the target size
 				$intWidth = intval($varWidth);
 				$intHeight = intval($varHeight);
-
+				
 				// load imagick
 				$objImagick = new Imagick();
-
+				
 				// read the source file
 				$objImagick->readImage(TL_ROOT . '/' . $strImage);
-
+				
 				// set the output format
 				$objImagick->setImageFormat($strFormat);
-
+				
 				// set the jpeg quality
 				if ($strFormat=='jpg')
 				{
 					$objImagick->setCompressionQuality($GLOBALS['TL_CONFIG']['jpgQuality']);
 				}
-
+				
 				// set filter
 				$strFilter = 'FILTER_' . strtoupper(preg_replace('#[^\w]#', '', $GLOBALS['TL_CONFIG']['magickimages_filter']));
 				$intFilter = eval('return Imagick::'.$strFilter.';');
-
+				
 				// Mode-specific changes
 				if ($intWidth && $intHeight)
 				{
@@ -342,7 +341,7 @@ else
 								unset($varWidth, $intWidth);
 							}
 							break;
-
+		
 						case 'box':
 							if (ceil($objFile->height * $varWidth / $objFile->width) <= $intHeight)
 							{
@@ -397,7 +396,7 @@ else
 							0);
 					}
 				}
-
+		
 				// resize by width
 				else if ($intWidth)
 				{
@@ -407,7 +406,7 @@ else
 						$intFilter,
 						1);
 				}
-
+		
 				// resize by height
 				else if ($intHeight)
 				{
@@ -423,7 +422,7 @@ else
 				{
 					$objImagick->blurimage($GLOBALS['TL_CONFIG']['magickimages_blur_radius'], $GLOBALS['TL_CONFIG']['magickimages_blur_sigma']);
 				}
-
+				
 				// unsharp image
 				if ($GLOBALS['TL_CONFIG']['magickimages_unsharp_mask'])
 				{
@@ -433,7 +432,7 @@ else
 						$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_amount'],
 						$GLOBALS['TL_CONFIG']['magickimages_unsharp_mask_threshold']);
 				}
-
+				
 				if ($objImagick->writeImage(TL_ROOT . '/' . $strCacheName)) {
 					// Set the file permissions when the Safe Mode Hack is used
 					if ($GLOBALS['TL_CONFIG']['useFTP'])
@@ -441,7 +440,7 @@ else
 						$this->import('Files');
 						$this->Files->chmod($strCacheName, 0644);
 					}
-
+					
 					// Return the path to new image
 					return $strCacheName;
 				}
