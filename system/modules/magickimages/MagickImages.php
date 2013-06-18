@@ -314,7 +314,7 @@ else
 				
 				// set filter
 				$strFilter = 'FILTER_' . strtoupper(preg_replace('#[^\w]#', '', $GLOBALS['TL_CONFIG']['magickimages_filter']));
-				$intFilter = eval('return Imagick::'.$strFilter.';');
+				$intFilter = constant('Imagick::'.$strFilter);
 				
 				// Mode-specific changes
 				if ($intWidth && $intHeight)
