@@ -80,7 +80,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_filter'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['magickimages_filter'],
 	'inputType'               => 'select',
-	'options'                 => array('Box', 'Catrom', 'Cubic', 'Gaussian', 'Hermite', 'Mitchell', 'Point', 'Quadratic', 'Triangle'),
+	'options'                 => array('Bessel', 'Blackman', 'Box', 'Catrom', 'Cubic', 'Gaussian', 'Hanning', 'Hamming', 'Hermite', 'Lanczos', 'Mitchell', 'Point', 'Quadratic', 'Sinc', 'Triangle', 'Undefined'),
 	'eval'                    => array('tl_class'=>'clr')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['magickimages_blur'] = array
