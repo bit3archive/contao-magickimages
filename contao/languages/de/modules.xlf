@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file original="system/modules/magickimages/languages/de/modules.php" source-language="de" datatype="php"
+		  date="2013-08-22T05:57:17+00:00" target-language="de">
+		<body>
+			<trans-unit id="MOD.magickimages.0">
+				<source xml:lang="de">ImageMagick integration</source>
+				<target xml:lang="de">ImageMagick Integration</target>
+			</trans-unit>
+			<trans-unit id="MOD.magickimages.1">
+				<source xml:lang="de">Ersetzt GD als Bildverarbeitungslibrary durch ImageMagick.</source>
+				<target xml:lang="de">Ersetzt GD als Bildverarbeitungslibrary durch ImageMagick.</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

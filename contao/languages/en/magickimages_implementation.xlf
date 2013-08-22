@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file original="system/modules/magickimages/languages/de/tl_settings.php" source-language="de" datatype="php"
+		  date="2013-08-22T07:37:42+00:00" target-language="de">
+		<body>
+			<trans-unit id="magickimages_implementation.process">
+				<target xml:lang="en">convert process</target>
+			</trans-unit>
+			<trans-unit id="magickimages_implementation.imagick">
+				<target xml:lang="en">Imagick library</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

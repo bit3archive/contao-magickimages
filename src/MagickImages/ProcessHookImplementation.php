@@ -321,7 +321,7 @@ class ProcessHookImplementation implements HookInterface
 			return false;
 		}
 
-		$this->process($image, $width, $height, $mode, $cacheName, $file);
+		$cacheName = $this->process($image, $width, $height, $mode, $cacheName, $file);
 
 		// Set the file permissions when the Safe Mode Hack is used
 		if ($this->smhEnabled) {
@@ -380,6 +380,8 @@ class ProcessHookImplementation implements HookInterface
 		if (!$process->isSuccessful()) {
 			throw new \RuntimeException('Could not convert image: ' . $process->getErrorOutput());
 		}
+
+		return $this->optimize($cacheName);
 	}
 
 	/**
@@ -538,5 +540,13 @@ class ProcessHookImplementation implements HookInterface
 				)
 			);
 		}
+	}
+
+	protected function optimize($cacheName)
+	{
+		if ($this->optimizer) {
+			return $this->optimizer->optimize($cacheName);
+		}
+		return $cacheName;
 	}
 }

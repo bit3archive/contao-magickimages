@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file original="system/modules/magickimages/languages/de/tl_settings.php" source-language="de" datatype="php"
+		  date="2013-08-22T07:37:42+00:00" target-language="de">
+		<body>
+			<trans-unit id="tl_settings.magickimages_force.0">
+				<source xml:lang="de">ImageMagick immer verwenden</source>
+				<target xml:lang="de">ImageMagick immer verwenden</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_force.1">
+				<source xml:lang="de">W&#xE4;hlen Sie diese Option um GD vollst&#xE4;ndig durch ImageMagick zu ersetzen.
+					Ist diese Option nicht aktiviert wird ImageMagick nur dann verwendet, wenn GD das Bild nicht
+					verarbeiten kann (Bildquelle &gt; 3000x3000 oder Zieldatei &gt; 1200x1200).
+				</source>
+				<target xml:lang="de">W&#xE4;hlen Sie diese Option um GD vollst&#xE4;ndig durch ImageMagick zu ersetzen.
+					Ist diese Option nicht aktiviert wird ImageMagick nur dann verwendet, wenn GD das Bild nicht
+					verarbeiten kann (Bildquelle &gt; 3000x3000 oder Zieldatei &gt; 1200x1200).
+				</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_implementation.0">
+				<source xml:lang="de">Implementierung</source>
+				<target xml:lang="de">Implementierung</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_implementation.1">
+				<source xml:lang="de">Wählen Sie, welche Implementierung sie verwenden möchten.</source>
+				<target xml:lang="de">Wählen Sie, welche Implementierung sie verwenden möchten.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_convert_path.0">
+				<source xml:lang="de">convert Pfad</source>
+				<target xml:lang="de">convert Pfad</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_convert_path.1">
+				<source xml:lang="de">Pfad zur Ausf&#xFC;hrbaren convert Datei.</source>
+				<target xml:lang="de">Pfad zur Ausf&#xFC;hrbaren convert Datei.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_filter.0">
+				<source xml:lang="de">Filter</source>
+				<target xml:lang="de">Filter</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_filter.1">
+				<source xml:lang="de">W&#xE4;hlen Sie hier den Skalierungsfilter aus.</source>
+				<target xml:lang="de">W&#xE4;hlen Sie hier den Skalierungsfilter aus.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_blur.0">
+				<source xml:lang="de">Blur</source>
+				<target xml:lang="de">Blur</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_blur.1">
+				<source xml:lang="de">Blur-Filter aktivieren.</source>
+				<target xml:lang="de">Blur-Filter aktivieren.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_blur_radius.0">
+				<source xml:lang="de">Blur Radius</source>
+				<target xml:lang="de">Blur Radius</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_blur_radius.1">
+				<source xml:lang="de">Radius f&#xFC;r Blur-Filter.</source>
+				<target xml:lang="de">Radius f&#xFC;r Blur-Filter.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_blur_sigma.0">
+				<source xml:lang="de">Blur Sigma</source>
+				<target xml:lang="de">Blur Sigma</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_blur_sigma.1">
+				<source xml:lang="de">Sigma f&#xFC;r Blur-Filter.</source>
+				<target xml:lang="de">Sigma f&#xFC;r Blur-Filter.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask.0">
+				<source xml:lang="de">Unsharp</source>
+				<target xml:lang="de">Unsharp</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask.1">
+				<source xml:lang="de">Unsch&#xE4;rfefilter aktivieren.</source>
+				<target xml:lang="de">Unsch&#xE4;rfefilter aktivieren.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_radius.0">
+				<source xml:lang="de">Unsharp Radius</source>
+				<target xml:lang="de">Unsharp Radius</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_radius.1">
+				<source xml:lang="de">Radius f&#xFC;r Unsch&#xE4;rfefilter.</source>
+				<target xml:lang="de">Radius f&#xFC;r Unsch&#xE4;rfefilter.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_sigma.0">
+				<source xml:lang="de">Unsharp Sigma</source>
+				<target xml:lang="de">Unsharp Sigma</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_sigma.1">
+				<source xml:lang="de">Sigma f&#xFC;r Unsch&#xE4;rfefilter.</source>
+				<target xml:lang="de">Sigma f&#xFC;r Unsch&#xE4;rfefilter.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_amount.0">
+				<source xml:lang="de">Unsharp Amount</source>
+				<target xml:lang="de">Unsharp Amount</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_amount.1">
+				<source xml:lang="de">Amount f&#xFC;r Unsch&#xE4;rfefilter.</source>
+				<target xml:lang="de">Amount f&#xFC;r Unsch&#xE4;rfefilter.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_threshold.0">
+				<source xml:lang="de">Unsharp Threshold</source>
+				<target xml:lang="de">Unsharp Threshold</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_unsharp_mask_threshold.1">
+				<source xml:lang="de">Threshold f&#xFC;r Unsch&#xE4;rfefilter.</source>
+				<target xml:lang="de">Threshold f&#xFC;r Unsch&#xE4;rfefilter.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_pngrewrite.0">
+				<source xml:lang="de">PNG Bilder mit pngrewrite optimieren</source>
+				<target xml:lang="de">PNG Bilder mit pngrewrite optimieren</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_pngrewrite.1">
+				<source xml:lang="de">Benutzt pngrewrite um PNG Bilder zu optimieren.</source>
+				<target xml:lang="de">Benutzt pngrewrite um PNG Bilder zu optimieren.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_optipng.0">
+				<source xml:lang="de">PNG/BMP/GIF Bilder mit optipng optimieren</source>
+				<target xml:lang="de">PNG/BMP/GIF Bilder mit optipng optimieren</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_optipng.1">
+				<source xml:lang="de">Benutzt optipng um PNG/BMP/GIF/PNM/TIFF Bilder zu optimieren.</source>
+				<target xml:lang="de">Benutzt optipng um PNG/BMP/GIF/PNM/TIFF Bilder zu optimieren.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_optipng_optimization_level.0">
+				<source xml:lang="de">optipng Optimierungslevel</source>
+				<target xml:lang="de">optipng Optimierungslevel</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_optipng_optimization_level.1">
+				<source xml:lang="de">W&#xE4;hlen Sie hier den gew&#xFC;nschten Optimierungslevel f&#xFC;r optipng
+					aus.
+				</source>
+				<target xml:lang="de">W&#xE4;hlen Sie hier den gew&#xFC;nschten Optimierungslevel f&#xFC;r optipng
+					aus.
+				</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_advpng.0">
+				<source xml:lang="de">PNG Bilder mit advpng optimieren</source>
+				<target xml:lang="de">PNG Bilder mit advpng optimieren</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_advpng.1">
+				<source xml:lang="de">Benutzt advpng um PNG Bilder zu optimieren.</source>
+				<target xml:lang="de">Benutzt advpng um PNG Bilder zu optimieren.</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_advpng_level.0">
+				<source xml:lang="de">advpng Optimierungslevel</source>
+				<target xml:lang="de">advpng Optimierungslevel</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_advpng_level.1">
+				<source xml:lang="de">W&#xE4;hlen Sie hier den gew&#xFC;nschten Optimierungslevel f&#xFC;r advpng aus.
+				</source>
+				<target xml:lang="de">W&#xE4;hlen Sie hier den gew&#xFC;nschten Optimierungslevel f&#xFC;r advpng aus.
+				</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.buildin">
+				<source xml:lang="de">Imagick PHP Library</source>
+				<target xml:lang="de">Imagick PHP Library</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.proc">
+				<source xml:lang="de">proc-Process</source>
+				<target xml:lang="de">proc-Process</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.exec">
+				<source xml:lang="de">exec-Befehl</source>
+				<target xml:lang="de">exec-Befehl</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.shell_exec">
+				<source xml:lang="de">shell_exec-Befehl</source>
+				<target xml:lang="de">shell_exec-Befehl</target>
+			</trans-unit>
+			<trans-unit id="tl_settings.magickimages_legend">
+				<source xml:lang="de">ImageMagick Bildverarbeitung</source>
+				<target xml:lang="de">ImageMagick Bildverarbeitung</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

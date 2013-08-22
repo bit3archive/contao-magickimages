@@ -42,8 +42,11 @@
 	"extra": {
 		"contao": {
 			"symlinks": {
-				"contao": "system/modules/theme-plus"
+				"contao": "system/modules/magickimages"
 			}
+		},
+		"branch-alias": {
+			"dev-master": "2.x-dev"
 		}
 	}
 }

@@ -297,7 +297,7 @@ class ImagickHookImplementation implements HookInterface
 			return false;
 		}
 
-		$this->process($image, $width, $height, $mode, $cacheName, $file);
+		$cacheName = $this->process($image, $width, $height, $mode, $cacheName, $file);
 
 		// Set the file permissions when the Safe Mode Hack is used
 		if ($this->smhEnabled) {
@@ -325,7 +325,7 @@ class ImagickHookImplementation implements HookInterface
 		}
 
 		// load imagick
-		$imagick = new Imagick();
+		$imagick = new \Imagick();
 
 		// read the source file
 		$imagick->readImage(TL_ROOT . '/' . $image);
@@ -345,6 +345,8 @@ class ImagickHookImplementation implements HookInterface
 		if (!$imagick->writeImage(TL_ROOT . '/' . $cacheName)) {
 			throw new \Exception('Could not write resized image');
 		}
+
+		return $this->optimize($cacheName);
 	}
 
 	/**
@@ -503,5 +505,13 @@ class ImagickHookImplementation implements HookInterface
 				$this->unsharpMaskThreshold
 			);
 		}
+	}
+
+	protected function optimize($cacheName)
+	{
+		if ($this->optimizer) {
+			return $this->optimizer->optimize($cacheName);
+		}
+		return $cacheName;
 	}
 }

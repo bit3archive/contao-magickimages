@@ -13,36 +13,36 @@
  * @link       http://avisota.org
  */
 
-$container['magickimages.optimizer.advpng'] = function($container) {
+$container['magickimages.optimizer.advpng'] = function ($container) {
 	$optimizer = new \MagickImages\AdvPngOptimizer();
 	$optimizer->setPath($GLOBALS['TL_CONFIG']['magickimages_advpng_path']);
 	$optimizer->setLevel($GLOBALS['TL_CONFIG']['magickimages_advpng_level']);
 	return $optimizer;
 };
 
-$container['magickimages.optimizer.optipng'] = function($container) {
+$container['magickimages.optimizer.optipng'] = function ($container) {
 	$optimizer = new \MagickImages\OptiPngOptimizer();
 	$optimizer->setPath($GLOBALS['TL_CONFIG']['magickimages_optipng_path']);
 	$optimizer->setLevel($GLOBALS['TL_CONFIG']['magickimages_optipng_optimization_level']);
 	return $optimizer;
 };
 
-$container['magickimages.optimizer.pngrewrite'] = function($container) {
+$container['magickimages.optimizer.pngrewrite'] = function ($container) {
 	$optimizer = new \MagickImages\PngRewriteOptimizer();
 	$optimizer->setPath($GLOBALS['TL_CONFIG']['magickimages_pngrewrite_path']);
 	return $optimizer;
 };
 
-$container['magickimages.optimizer'] = function($container) {
+$container['magickimages.optimizer'] = function ($container) {
 	$optimizerKeys = deserialize($GLOBALS['TL_CONFIG']['magickimages_optimizers'], true);
-	$chain = new \MagickImages\OptimizerChain();
+	$chain         = new \MagickImages\OptimizerChain();
 	foreach ($optimizerKeys as $optimizerKey) {
 		$chain->addOptimizer($container['magickimages.optimizer.' . $optimizerKey]);
 	}
 	return $chain;
 };
 
-$container['magickimages.impl.process'] = function($container) {
+$container['magickimages.impl.process'] = function ($container) {
 	$hook = new \MagickImages\ProcessHookImplementation();
 	$hook->setPath($GLOBALS['TL_CONFIG']['magickimages_convert_path']);
 	$hook->setJpegQuality($GLOBALS['TL_CONFIG']['jpgQuality']);
@@ -59,7 +59,7 @@ $container['magickimages.impl.process'] = function($container) {
 	return $hook;
 };
 
-$container['magickimages.impl.imagick'] = function($container) {
+$container['magickimages.impl.imagick'] = function ($container) {
 	$hook = new \MagickImages\ImagickHookImplementation();
 	$hook->setJpegQuality($GLOBALS['TL_CONFIG']['jpgQuality']);
 	$hook->setSmhEnabled($GLOBALS['TL_CONFIG']['useFTP']);
@@ -76,7 +76,7 @@ $container['magickimages.impl.imagick'] = function($container) {
 };
 
 $container['magickimages.hook'] = $container->share(
-	function($container) {
+	function ($container) {
 		return $container['magickimages.impl.' . $GLOBALS['TL_CONFIG']['magickimages_implementation']];
 	}
 );
