@@ -335,7 +335,8 @@ class ImagickHookImplementation implements HookInterface
 
 		// set the jpeg quality
 		if ($format == 'jpg') {
-			$imagick->setCompressionQuality($this->jpegQuality);
+			$imagick->setImageCompression(\Imagick::COMPRESSION_JPEG);
+			$imagick->setImageCompressionQuality($this->jpegQuality);
 		}
 
 		$this->resizeAndCrop($file, $imagick, $width, $height, $mode);
